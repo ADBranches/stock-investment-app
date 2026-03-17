@@ -1,17 +1,13 @@
 package com.mutebi.stockinvestmentapp
 
+import com.mutebi.stockinvestmentapp.core.utils.Validator
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
-import org.junit.Assert.*
-
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 class ExampleUnitTest {
+
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun emailValidator_works() {
+        assertTrue(Validator.isValidEmail("user@example.com"))
     }
 }
