@@ -6,7 +6,7 @@ data class KycUiState(
     val nationalIdNumber: String = "",
     val documentType: String = "",
     val documentNumber: String = "",
-    val status: String = "",
+    val status: String = "not_started",
     val isLoading: Boolean = false,
     val error: String? = null,
     val success: Boolean = false

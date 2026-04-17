@@ -19,6 +19,7 @@ def me():
     return success_response("User profile retrieved successfully.", user.to_dict())
 
 
+@users_bp.patch("/me/profile")
 @users_bp.put("/profile")
 @jwt_required()
 def update_profile():

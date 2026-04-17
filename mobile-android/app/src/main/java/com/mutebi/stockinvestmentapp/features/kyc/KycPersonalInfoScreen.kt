@@ -15,13 +15,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mutebi.stockinvestmentapp.features.auth.components.AuthHeader
 
 @Composable
 fun KycPersonalInfoScreen(
     onNext: () -> Unit,
-    vm: KycViewModel = viewModel()
+    vm: KycViewModel
 ) {
     val state by vm.uiState.collectAsState()
 
@@ -70,4 +69,4 @@ fun KycPersonalInfoScreen(
             Text("Next")
         }
     }
-}
+}  

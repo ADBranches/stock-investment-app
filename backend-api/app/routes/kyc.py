@@ -32,6 +32,7 @@ def submit_kyc():
     return success_response("KYC submitted successfully.", submission.to_dict(), 201)
 
 
+@kyc_bp.get("/me")
 @kyc_bp.get("/status")
 @jwt_required()
 def get_kyc_status():
@@ -40,3 +41,18 @@ def get_kyc_status():
         return error_response("KYC record not found.", status_code=404)
 
     return success_response("KYC status retrieved successfully.", submission.to_dict())
+
+
+@kyc_bp.patch("/me")
+@jwt_required()
+def update_kyc():
+    payload = request.get_json(silent=True) or {}
+    data, errors = load_schema_or_errors(kyc_submission_schema, payload)
+    if errors:
+        return error_response("Validation failed.", errors, 400)
+
+    submission = KYCService.update_kyc(int(get_jwt_identity()), data)
+    if not submission:
+        return error_response("KYC record not found.", status_code=404)
+
+    return success_response("KYC updated successfully.", submission.to_dict())

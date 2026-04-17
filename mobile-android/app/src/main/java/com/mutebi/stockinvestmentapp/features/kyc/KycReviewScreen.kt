@@ -2,10 +2,11 @@ package com.mutebi.stockinvestmentapp.features.kyc
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -15,12 +16,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun KycReviewScreen(
     onSuccess: () -> Unit,
-    vm: KycViewModel = viewModel()
+    vm: KycViewModel
 ) {
     val state by vm.uiState.collectAsState()
 
@@ -51,7 +51,8 @@ fun KycReviewScreen(
 
         Button(
             onClick = vm::submit,
-            enabled = !state.isLoading
+            enabled = !state.isLoading,
+            modifier = Modifier.fillMaxWidth()
         ) {
             if (state.isLoading) {
                 CircularProgressIndicator()
