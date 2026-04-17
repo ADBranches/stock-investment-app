@@ -4,15 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -34,12 +32,6 @@ fun AppNavGraph(
     isLoggedIn: Boolean,
     modifier: Modifier = Modifier
 ) {
-    var kycFirstName by rememberSaveable { mutableStateOf("") }
-    var kycLastName by rememberSaveable { mutableStateOf("") }
-    var kycNationalIdNumber by rememberSaveable { mutableStateOf("") }
-    var kycDocumentType by rememberSaveable { mutableStateOf("national_id") }
-    var kycDocumentNumber by rememberSaveable { mutableStateOf("") }
-
     NavHost(
         navController = navController,
         startDestination = Routes.Splash.route,
@@ -128,12 +120,6 @@ fun AppNavGraph(
 
         composable(Routes.KycPersonalInfo.route) {
             KycPersonalInfoScreen(
-                firstName = kycFirstName,
-                lastName = kycLastName,
-                nationalIdNumber = kycNationalIdNumber,
-                onFirstNameChange = { kycFirstName = it },
-                onLastNameChange = { kycLastName = it },
-                onNationalIdNumberChange = { kycNationalIdNumber = it },
                 onNext = {
                     navController.navigate(Routes.KycDocumentUpload.route)
                 }
@@ -142,10 +128,6 @@ fun AppNavGraph(
 
         composable(Routes.KycDocumentUpload.route) {
             KycDocumentUploadScreen(
-                documentType = kycDocumentType,
-                documentNumber = kycDocumentNumber,
-                onDocumentTypeChange = { kycDocumentType = it },
-                onDocumentNumberChange = { kycDocumentNumber = it },
                 onNext = {
                     navController.navigate(Routes.KycReview.route)
                 }
@@ -154,14 +136,6 @@ fun AppNavGraph(
 
         composable(Routes.KycReview.route) {
             KycReviewScreen(
-                firstName = kycFirstName,
-                lastName = kycLastName,
-                nationalIdNumber = kycNationalIdNumber,
-                documentType = kycDocumentType,
-                documentNumber = kycDocumentNumber,
-                onBack = {
-                    navController.popBackStack()
-                },
                 onSuccess = {
                     navController.navigate(Routes.KycSuccess.route) {
                         popUpTo(Routes.KycReview.route) { inclusive = true }
@@ -181,65 +155,51 @@ fun AppNavGraph(
         }
 
         composable(Routes.Dashboard.route) {
-            PlaceholderPhase5Screen(
-                title = "Dashboard coming in Phase 5",
-                buttonText = "Go to Market placeholder",
-                onClick = {
-                    navController.navigate(Routes.Market.route)
-                }
+            Phase4PlaceholderScreen(
+                title = "Dashboard comes in Phase 5",
+                message = "Phase 4 is complete up to auth, profile setup, and KYC."
             )
         }
 
         composable(Routes.Market.route) {
-            PlaceholderPhase5Screen(
-                title = "Market screen coming in Phase 5",
-                buttonText = "Go to Watchlist placeholder",
-                onClick = {
-                    navController.navigate(Routes.Watchlist.route)
-                }
+            Phase4PlaceholderScreen(
+                title = "Market comes in Phase 5",
+                message = "This route is intentionally deferred until Market Discovery."
             )
         }
 
         composable(Routes.Watchlist.route) {
-            PlaceholderPhase5Screen(
-                title = "Watchlist screen coming in Phase 5",
-                buttonText = "Go to Portfolio placeholder",
-                onClick = {
-                    navController.navigate(Routes.Portfolio.route)
-                }
+            Phase4PlaceholderScreen(
+                title = "Watchlist comes in Phase 5",
+                message = "This route is intentionally deferred until Market Discovery."
             )
         }
 
         composable(Routes.Portfolio.route) {
-            PlaceholderPhase5Screen(
-                title = "Portfolio screen coming in Phase 5",
-                buttonText = "Back to Dashboard placeholder",
-                onClick = {
-                    navController.navigate(Routes.Dashboard.route)
-                }
+            Phase4PlaceholderScreen(
+                title = "Portfolio comes in Phase 6",
+                message = "This route is intentionally deferred until Portfolio and Trade Flow."
             )
         }
     }
 }
 
 @Composable
-private fun PlaceholderPhase5Screen(
+private fun Phase4PlaceholderScreen(
     title: String,
-    buttonText: String,
-    onClick: () -> Unit
+    message: String
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(text = title)
-            Button(onClick = onClick) {
-                Text(buttonText)
-            }
+            Text(text = message)
         }
     }
 }
