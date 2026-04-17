@@ -10,22 +10,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.mutebi.stockinvestmentapp.features.auth.forgot_password.ForgotPasswordScreen
 import com.mutebi.stockinvestmentapp.features.auth.login.LoginScreen
 import com.mutebi.stockinvestmentapp.features.auth.register.RegisterScreen
+import com.mutebi.stockinvestmentapp.features.home.dashboard.DashboardScreen
 import com.mutebi.stockinvestmentapp.features.kyc.KycDocumentUploadScreen
 import com.mutebi.stockinvestmentapp.features.kyc.KycIntroScreen
 import com.mutebi.stockinvestmentapp.features.kyc.KycPersonalInfoScreen
 import com.mutebi.stockinvestmentapp.features.kyc.KycReviewScreen
 import com.mutebi.stockinvestmentapp.features.kyc.KycSuccessScreen
 import com.mutebi.stockinvestmentapp.features.kyc.KycViewModel
+import com.mutebi.stockinvestmentapp.features.market.details.AssetDetailScreen
+import com.mutebi.stockinvestmentapp.features.market.list.MarketListScreen
 import com.mutebi.stockinvestmentapp.features.onboarding.OnboardingScreen
 import com.mutebi.stockinvestmentapp.features.profile.setup.ProfileSetupScreen
 import com.mutebi.stockinvestmentapp.features.splash.SplashScreen
+import com.mutebi.stockinvestmentapp.features.watchlist.WatchlistScreen
 
 @Composable
 fun AppNavGraph(
@@ -33,7 +37,7 @@ fun AppNavGraph(
     isLoggedIn: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val kycVm: KycViewModel = hiltViewModel()
+    val kycVm: KycViewModel = viewModel()
 
     NavHost(
         navController = navController,
@@ -49,7 +53,7 @@ fun AppNavGraph(
                     }
                 },
                 onNavigateToDashboard = {
-                    navController.navigate(Routes.ProfileSetup.route) {
+                    navController.navigate(Routes.Dashboard.route) {
                         popUpTo(Routes.Splash.route) { inclusive = true }
                     }
                 }
@@ -69,7 +73,7 @@ fun AppNavGraph(
         composable(Routes.Login.route) {
             LoginScreen(
                 onLoginSuccess = {
-                    navController.navigate(Routes.ProfileSetup.route) {
+                    navController.navigate(Routes.Dashboard.route) {
                         popUpTo(Routes.Login.route) { inclusive = true }
                     }
                 },
@@ -161,28 +165,59 @@ fun AppNavGraph(
         }
 
         composable(Routes.Dashboard.route) {
-            Phase4PlaceholderScreen(
-                title = "Dashboard comes in Phase 5",
-                message = "Phase 4 is complete up to auth, profile setup, and KYC."
+            DashboardScreen(
+                onOpenMarket = {
+                    navController.navigate(Routes.Market.route)
+                },
+                onOpenWatchlist = {
+                    navController.navigate(Routes.Watchlist.route)
+                }
             )
         }
 
         composable(Routes.Market.route) {
-            Phase4PlaceholderScreen(
-                title = "Market comes in Phase 5",
-                message = "This route is intentionally deferred until Market Discovery."
+            MarketListScreen(
+                onAssetClick = { assetId ->
+                    navController.navigate(Routes.AssetDetail.createRoute(assetId))
+                },
+                onOpenWatchlist = {
+                    navController.navigate(Routes.Watchlist.route)
+                }
             )
         }
 
         composable(Routes.Watchlist.route) {
-            Phase4PlaceholderScreen(
-                title = "Watchlist comes in Phase 5",
-                message = "This route is intentionally deferred until Market Discovery."
+            WatchlistScreen(
+                onOpenMarket = {
+                    navController.navigate(Routes.Market.route)
+                },
+                onBack = {
+                    navController.popBackStack()
+                }
             )
         }
 
+        composable(Routes.AssetDetail.route) { backStackEntry ->
+            val assetId = backStackEntry.arguments?.getString("assetId")?.toIntOrNull()
+
+            if (assetId == null) {
+                Phase5PlaceholderScreen(
+                    title = "Asset detail unavailable",
+                    message = "The selected asset ID was not found."
+                )
+            } else {
+                AssetDetailScreen(
+                    assetId = assetId,
+                    onBack = { navController.popBackStack() },
+                    onOpenWatchlist = {
+                        navController.navigate(Routes.Watchlist.route)
+                    }
+                )
+            }
+        }
+
         composable(Routes.Portfolio.route) {
-            Phase4PlaceholderScreen(
+            Phase5PlaceholderScreen(
                 title = "Portfolio comes in Phase 6",
                 message = "This route is intentionally deferred until Portfolio and Trade Flow."
             )
@@ -191,7 +226,7 @@ fun AppNavGraph(
 }
 
 @Composable
-private fun Phase4PlaceholderScreen(
+private fun Phase5PlaceholderScreen(
     title: String,
     message: String
 ) {
