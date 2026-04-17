@@ -11,7 +11,9 @@ data class ApiEnvelopeDto<T>(
     @SerializedName("data")
     val data: T? = null,
     @SerializedName("token")
-    val token: String? = null
+    val token: String? = null,
+    @SerializedName("errors")
+    val errors: Map<String, List<String>>? = null
 )
 
 data class LoginRequestDto(
@@ -29,6 +31,7 @@ data class RegisterRequestDto(
     @SerializedName("full_name")
     val fullName: String
 )
+
 data class ForgotPasswordRequestDto(
     @SerializedName("email")
     val email: String

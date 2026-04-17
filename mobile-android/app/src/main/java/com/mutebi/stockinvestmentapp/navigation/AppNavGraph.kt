@@ -1,6 +1,17 @@
 package com.mutebi.stockinvestmentapp.navigation
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -23,6 +34,12 @@ fun AppNavGraph(
     isLoggedIn: Boolean,
     modifier: Modifier = Modifier
 ) {
+    var kycFirstName by rememberSaveable { mutableStateOf("") }
+    var kycLastName by rememberSaveable { mutableStateOf("") }
+    var kycNationalIdNumber by rememberSaveable { mutableStateOf("") }
+    var kycDocumentType by rememberSaveable { mutableStateOf("national_id") }
+    var kycDocumentNumber by rememberSaveable { mutableStateOf("") }
+
     NavHost(
         navController = navController,
         startDestination = Routes.Splash.route,
@@ -111,6 +128,12 @@ fun AppNavGraph(
 
         composable(Routes.KycPersonalInfo.route) {
             KycPersonalInfoScreen(
+                firstName = kycFirstName,
+                lastName = kycLastName,
+                nationalIdNumber = kycNationalIdNumber,
+                onFirstNameChange = { kycFirstName = it },
+                onLastNameChange = { kycLastName = it },
+                onNationalIdNumberChange = { kycNationalIdNumber = it },
                 onNext = {
                     navController.navigate(Routes.KycDocumentUpload.route)
                 }
@@ -119,6 +142,10 @@ fun AppNavGraph(
 
         composable(Routes.KycDocumentUpload.route) {
             KycDocumentUploadScreen(
+                documentType = kycDocumentType,
+                documentNumber = kycDocumentNumber,
+                onDocumentTypeChange = { kycDocumentType = it },
+                onDocumentNumberChange = { kycDocumentNumber = it },
                 onNext = {
                     navController.navigate(Routes.KycReview.route)
                 }
@@ -127,6 +154,14 @@ fun AppNavGraph(
 
         composable(Routes.KycReview.route) {
             KycReviewScreen(
+                firstName = kycFirstName,
+                lastName = kycLastName,
+                nationalIdNumber = kycNationalIdNumber,
+                documentType = kycDocumentType,
+                documentNumber = kycDocumentNumber,
+                onBack = {
+                    navController.popBackStack()
+                },
                 onSuccess = {
                     navController.navigate(Routes.KycSuccess.route) {
                         popUpTo(Routes.KycReview.route) { inclusive = true }
@@ -146,19 +181,65 @@ fun AppNavGraph(
         }
 
         composable(Routes.Dashboard.route) {
-            // TODO: Replace with real DashboardScreen()
+            PlaceholderPhase5Screen(
+                title = "Dashboard coming in Phase 5",
+                buttonText = "Go to Market placeholder",
+                onClick = {
+                    navController.navigate(Routes.Market.route)
+                }
+            )
         }
 
         composable(Routes.Market.route) {
-            // TODO: Replace with real MarketScreen()
+            PlaceholderPhase5Screen(
+                title = "Market screen coming in Phase 5",
+                buttonText = "Go to Watchlist placeholder",
+                onClick = {
+                    navController.navigate(Routes.Watchlist.route)
+                }
+            )
         }
 
         composable(Routes.Watchlist.route) {
-            // TODO: Replace with real WatchlistScreen()
+            PlaceholderPhase5Screen(
+                title = "Watchlist screen coming in Phase 5",
+                buttonText = "Go to Portfolio placeholder",
+                onClick = {
+                    navController.navigate(Routes.Portfolio.route)
+                }
+            )
         }
 
         composable(Routes.Portfolio.route) {
-            // TODO: Replace with real PortfolioScreen()
+            PlaceholderPhase5Screen(
+                title = "Portfolio screen coming in Phase 5",
+                buttonText = "Back to Dashboard placeholder",
+                onClick = {
+                    navController.navigate(Routes.Dashboard.route)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun PlaceholderPhase5Screen(
+    title: String,
+    buttonText: String,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = title)
+            Button(onClick = onClick) {
+                Text(buttonText)
+            }
         }
     }
 }
