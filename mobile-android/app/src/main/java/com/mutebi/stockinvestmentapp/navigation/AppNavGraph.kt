@@ -14,6 +14,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.mutebi.stockinvestmentapp.features.account.AccountScreen
+import com.mutebi.stockinvestmentapp.features.account.AccountViewModel
+import com.mutebi.stockinvestmentapp.features.account.ChangePasswordScreen
+import com.mutebi.stockinvestmentapp.features.account.EditProfileScreen
 import com.mutebi.stockinvestmentapp.features.auth.forgot_password.ForgotPasswordScreen
 import com.mutebi.stockinvestmentapp.features.auth.login.LoginScreen
 import com.mutebi.stockinvestmentapp.features.auth.register.RegisterScreen
@@ -33,6 +37,10 @@ import com.mutebi.stockinvestmentapp.features.onboarding.OnboardingScreen
 import com.mutebi.stockinvestmentapp.features.portfolio.history.TransactionHistoryScreen
 import com.mutebi.stockinvestmentapp.features.portfolio.overview.PortfolioScreen
 import com.mutebi.stockinvestmentapp.features.profile.setup.ProfileSetupScreen
+import com.mutebi.stockinvestmentapp.features.security.SecuritySettingsScreen
+import com.mutebi.stockinvestmentapp.features.security.SecuritySettingsViewModel
+import com.mutebi.stockinvestmentapp.features.settings.SettingsScreen
+import com.mutebi.stockinvestmentapp.features.settings.SettingsViewModel
 import com.mutebi.stockinvestmentapp.features.splash.SplashScreen
 import com.mutebi.stockinvestmentapp.features.trade.confirm.TradeConfirmScreen
 import com.mutebi.stockinvestmentapp.features.trade.confirm.TradeResultScreen
@@ -48,6 +56,9 @@ fun AppNavGraph(
 ) {
     val kycVm: KycViewModel = viewModel()
     val tradeVm: TradeOrderViewModel = viewModel()
+    val accountVm: AccountViewModel = viewModel()
+    val settingsVm: SettingsViewModel = viewModel()
+    val securityVm: SecuritySettingsViewModel = viewModel()
 
     NavHost(
         navController = navController,
@@ -217,7 +228,7 @@ fun AppNavGraph(
             val assetId = backStackEntry.arguments?.getString("assetId")?.toIntOrNull()
 
             if (assetId == null) {
-                Phase7PlaceholderScreen(
+                Phase8PlaceholderScreen(
                     title = "Asset detail unavailable",
                     message = "The selected asset ID was not found."
                 )
@@ -261,7 +272,7 @@ fun AppNavGraph(
             val assetId = backStackEntry.arguments?.getString("assetId")?.toIntOrNull()
 
             if (assetId == null) {
-                Phase7PlaceholderScreen(
+                Phase8PlaceholderScreen(
                     title = "Trade setup unavailable",
                     message = "The selected asset ID was not found."
                 )
@@ -314,7 +325,7 @@ fun AppNavGraph(
             val articleId = backStackEntry.arguments?.getString("articleId")?.toIntOrNull()
 
             if (articleId == null) {
-                Phase7PlaceholderScreen(
+                Phase8PlaceholderScreen(
                     title = "Article unavailable",
                     message = "The selected article ID was not found."
                 )
@@ -331,11 +342,65 @@ fun AppNavGraph(
                 onBack = { navController.popBackStack() }
             )
         }
+
+        composable(Routes.Settings.route) {
+            SettingsScreen(
+                vm = settingsVm,
+                onOpenSecurity = {
+                    navController.navigate(Routes.SecuritySettings.route)
+                },
+                onOpenAccount = {
+                    navController.navigate(Routes.Account.route)
+                }
+            )
+        }
+
+        composable(Routes.SecuritySettings.route) {
+            SecuritySettingsScreen(
+                vm = securityVm,
+                onBack = { navController.popBackStack() },
+                onOpenChangePassword = {
+                    navController.navigate(Routes.ChangePassword.route)
+                }
+            )
+        }
+
+        composable(Routes.Account.route) {
+            AccountScreen(
+                vm = accountVm,
+                onBack = { navController.popBackStack() },
+                onEditProfile = {
+                    navController.navigate(Routes.EditProfile.route)
+                },
+                onChangePassword = {
+                    navController.navigate(Routes.ChangePassword.route)
+                },
+                onLoggedOut = {
+                    navController.navigate(Routes.Login.route) {
+                        popUpTo(Routes.Dashboard.route) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        composable(Routes.EditProfile.route) {
+            EditProfileScreen(
+                vm = accountVm,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.ChangePassword.route) {
+            ChangePasswordScreen(
+                vm = accountVm,
+                onBack = { navController.popBackStack() }
+            )
+        }
     }
 }
 
 @Composable
-private fun Phase7PlaceholderScreen(
+private fun Phase8PlaceholderScreen(
     title: String,
     message: String
 ) {

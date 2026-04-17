@@ -3,6 +3,7 @@ package com.mutebi.stockinvestmentapp.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -35,7 +36,13 @@ sealed class BottomNavItem(
         icon = Icons.Filled.List
     )
 
+    data object Settings : BottomNavItem(
+        route = Routes.Settings.route,
+        label = "Settings",
+        icon = Icons.Filled.Settings
+    )
+
     companion object {
-        val items = listOf(Dashboard, Market, Watchlist, Portfolio)
+        val items = listOf(Dashboard, Market, Watchlist, Portfolio, Settings)
     }
 }

@@ -115,6 +115,44 @@ class AuthRepository(
         }
     }
 
+    suspend fun changePassword(
+        currentPassword: String,
+        newPassword: String
+    ): Resource<String> {
+        return try {
+            val response = authApi.changePassword(
+                mapOf(
+                    "current_password" to currentPassword,
+                    "new_password" to newPassword
+                )
+            )
+            val body = response.body()
+
+            if (response.isSuccessful && body?.success == true) {
+                Resource.Success(body.message.ifBlank { "Password changed successfully." })
+            } else {
+                Resource.Error(body?.message ?: "Password change failed")
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Password change failed")
+        }
+    }
+
+    suspend fun revokeOtherSessions(): Resource<String> {
+        return try {
+            val response = authApi.revokeOtherSessions()
+            val body = response.body()
+
+            if (response.isSuccessful && body?.success == true) {
+                Resource.Success(body.message.ifBlank { "Other sessions revoked successfully." })
+            } else {
+                Resource.Error(body?.message ?: "Failed to revoke other sessions")
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Failed to revoke other sessions")
+        }
+    }
+
     fun restoreSession() {
         val token = sessionManager.getToken()
         if (!token.isNullOrBlank()) {

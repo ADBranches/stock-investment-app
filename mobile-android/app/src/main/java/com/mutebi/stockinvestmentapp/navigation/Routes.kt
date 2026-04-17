@@ -25,6 +25,12 @@ sealed class Routes(val route: String) {
     data object EducationHub : Routes("education_hub")
     data object NotificationCenter : Routes("notification_center")
 
+    data object Settings : Routes("settings")
+    data object SecuritySettings : Routes("security_settings")
+    data object Account : Routes("account")
+    data object EditProfile : Routes("edit_profile")
+    data object ChangePassword : Routes("change_password")
+
     data object AssetDetail : Routes("asset_detail/{assetId}") {
         fun createRoute(assetId: Int): String = "asset_detail/$assetId"
     }

@@ -29,4 +29,12 @@ interface AuthApi {
 
     @GET("api/v1/auth/me")
     suspend fun me(): Response<ApiEnvelopeDto<AuthUserDto>>
+
+    @POST("api/v1/security/change-password")
+    suspend fun changePassword(
+        @Body payload: Map<String, String>
+    ): Response<ApiEnvelopeDto<Unit>>
+
+    @POST("api/v1/security/revoke-other-sessions")
+    suspend fun revokeOtherSessions(): Response<ApiEnvelopeDto<Unit>>
 }
