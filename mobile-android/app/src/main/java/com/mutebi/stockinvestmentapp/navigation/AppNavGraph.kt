@@ -5,12 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,6 +22,7 @@ import com.mutebi.stockinvestmentapp.features.kyc.KycIntroScreen
 import com.mutebi.stockinvestmentapp.features.kyc.KycPersonalInfoScreen
 import com.mutebi.stockinvestmentapp.features.kyc.KycReviewScreen
 import com.mutebi.stockinvestmentapp.features.kyc.KycSuccessScreen
+import com.mutebi.stockinvestmentapp.features.kyc.KycViewModel
 import com.mutebi.stockinvestmentapp.features.onboarding.OnboardingScreen
 import com.mutebi.stockinvestmentapp.features.profile.setup.ProfileSetupScreen
 import com.mutebi.stockinvestmentapp.features.splash.SplashScreen
@@ -32,6 +33,8 @@ fun AppNavGraph(
     isLoggedIn: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val kycVm: KycViewModel = hiltViewModel()
+
     NavHost(
         navController = navController,
         startDestination = Routes.Splash.route,
@@ -120,6 +123,7 @@ fun AppNavGraph(
 
         composable(Routes.KycPersonalInfo.route) {
             KycPersonalInfoScreen(
+                vm = kycVm,
                 onNext = {
                     navController.navigate(Routes.KycDocumentUpload.route)
                 }
@@ -128,6 +132,7 @@ fun AppNavGraph(
 
         composable(Routes.KycDocumentUpload.route) {
             KycDocumentUploadScreen(
+                vm = kycVm,
                 onNext = {
                     navController.navigate(Routes.KycReview.route)
                 }
@@ -136,6 +141,7 @@ fun AppNavGraph(
 
         composable(Routes.KycReview.route) {
             KycReviewScreen(
+                vm = kycVm,
                 onSuccess = {
                     navController.navigate(Routes.KycSuccess.route) {
                         popUpTo(Routes.KycReview.route) { inclusive = true }
