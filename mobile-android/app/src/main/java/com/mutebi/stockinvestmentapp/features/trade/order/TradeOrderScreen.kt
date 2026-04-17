@@ -15,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.mutebi.stockinvestmentapp.features.education.components.RiskNoticeBanner
 import com.mutebi.stockinvestmentapp.features.trade.components.OrderSummaryCard
 import com.mutebi.stockinvestmentapp.features.trade.components.QuantitySelector
 import com.mutebi.stockinvestmentapp.features.trade.components.TradeActionTabs
@@ -44,6 +45,10 @@ fun TradeOrderScreen(
         }
 
         Text("Trade order")
+
+        RiskNoticeBanner(
+            text = "Risk warning: market prices can move quickly. Review your trade size carefully and make sure it matches your goals."
+        )
 
         if (state.isLoading) {
             CircularProgressIndicator()

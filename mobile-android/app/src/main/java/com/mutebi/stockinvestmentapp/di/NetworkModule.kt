@@ -2,7 +2,9 @@ package com.mutebi.stockinvestmentapp.di
 
 import com.mutebi.stockinvestmentapp.data.remote.api.AssetApi
 import com.mutebi.stockinvestmentapp.data.remote.api.AuthApi
+import com.mutebi.stockinvestmentapp.data.remote.api.EducationApi
 import com.mutebi.stockinvestmentapp.data.remote.api.KycApi
+import com.mutebi.stockinvestmentapp.data.remote.api.NotificationApi
 import com.mutebi.stockinvestmentapp.data.remote.api.PortfolioApi
 import com.mutebi.stockinvestmentapp.data.remote.api.TradeApi
 import com.mutebi.stockinvestmentapp.data.remote.api.TransactionApi
@@ -65,4 +67,12 @@ object NetworkModule {
     @Provides
     fun provideTransactionApi(retrofit: Retrofit): TransactionApi =
         retrofit.create(TransactionApi::class.java)
+
+    @Provides
+    fun provideEducationApi(retrofit: Retrofit): EducationApi =
+        retrofit.create(EducationApi::class.java)
+
+    @Provides
+    fun provideNotificationApi(retrofit: Retrofit): NotificationApi =
+        retrofit.create(NotificationApi::class.java)
 }

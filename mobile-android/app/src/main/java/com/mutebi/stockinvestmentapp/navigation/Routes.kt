@@ -22,6 +22,9 @@ sealed class Routes(val route: String) {
     data object Portfolio : Routes("portfolio")
     data object TransactionHistory : Routes("portfolio_history")
 
+    data object EducationHub : Routes("education_hub")
+    data object NotificationCenter : Routes("notification_center")
+
     data object AssetDetail : Routes("asset_detail/{assetId}") {
         fun createRoute(assetId: Int): String = "asset_detail/$assetId"
     }
@@ -32,4 +35,8 @@ sealed class Routes(val route: String) {
 
     data object TradeConfirm : Routes("trade_confirm")
     data object TradeResult : Routes("trade_result")
+
+    data object ArticleDetail : Routes("article_detail/{articleId}") {
+        fun createRoute(articleId: Int): String = "article_detail/$articleId"
+    }
 }

@@ -2,7 +2,9 @@ package com.mutebi.stockinvestmentapp.di
 
 import com.mutebi.stockinvestmentapp.data.remote.api.AssetApi
 import com.mutebi.stockinvestmentapp.data.remote.api.AuthApi
+import com.mutebi.stockinvestmentapp.data.remote.api.EducationApi
 import com.mutebi.stockinvestmentapp.data.remote.api.KycApi
+import com.mutebi.stockinvestmentapp.data.remote.api.NotificationApi
 import com.mutebi.stockinvestmentapp.data.remote.api.PortfolioApi
 import com.mutebi.stockinvestmentapp.data.remote.api.TradeApi
 import com.mutebi.stockinvestmentapp.data.remote.api.TransactionApi
@@ -10,7 +12,9 @@ import com.mutebi.stockinvestmentapp.data.remote.api.UserApi
 import com.mutebi.stockinvestmentapp.data.remote.api.WatchlistApi
 import com.mutebi.stockinvestmentapp.data.repository.AssetRepository
 import com.mutebi.stockinvestmentapp.data.repository.AuthRepository
+import com.mutebi.stockinvestmentapp.data.repository.EducationRepository
 import com.mutebi.stockinvestmentapp.data.repository.KycRepository
+import com.mutebi.stockinvestmentapp.data.repository.NotificationRepository
 import com.mutebi.stockinvestmentapp.data.repository.PortfolioRepository
 import com.mutebi.stockinvestmentapp.data.repository.TradeRepository
 import com.mutebi.stockinvestmentapp.data.repository.TransactionRepository
@@ -66,4 +70,14 @@ object RepositoryModule {
     fun provideTransactionRepository(
         transactionApi: TransactionApi
     ): TransactionRepository = TransactionRepository(transactionApi)
+
+    @Provides
+    fun provideEducationRepository(
+        educationApi: EducationApi
+    ): EducationRepository = EducationRepository(educationApi)
+
+    @Provides
+    fun provideNotificationRepository(
+        notificationApi: NotificationApi
+    ): NotificationRepository = NotificationRepository(notificationApi)
 }

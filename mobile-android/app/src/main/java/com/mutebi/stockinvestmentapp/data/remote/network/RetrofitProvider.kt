@@ -5,7 +5,9 @@ import com.google.gson.GsonBuilder
 import com.mutebi.stockinvestmentapp.core.constants.ApiConstants
 import com.mutebi.stockinvestmentapp.data.remote.api.AssetApi
 import com.mutebi.stockinvestmentapp.data.remote.api.AuthApi
+import com.mutebi.stockinvestmentapp.data.remote.api.EducationApi
 import com.mutebi.stockinvestmentapp.data.remote.api.KycApi
+import com.mutebi.stockinvestmentapp.data.remote.api.NotificationApi
 import com.mutebi.stockinvestmentapp.data.remote.api.PortfolioApi
 import com.mutebi.stockinvestmentapp.data.remote.api.TradeApi
 import com.mutebi.stockinvestmentapp.data.remote.api.TransactionApi
@@ -71,4 +73,10 @@ object RetrofitProvider {
 
     fun transactionApi(application: Application): TransactionApi =
         retrofit(application).create(TransactionApi::class.java)
+
+    fun educationApi(application: Application): EducationApi =
+        retrofit(application).create(EducationApi::class.java)
+
+    fun notificationApi(application: Application): NotificationApi =
+        retrofit(application).create(NotificationApi::class.java)
 }

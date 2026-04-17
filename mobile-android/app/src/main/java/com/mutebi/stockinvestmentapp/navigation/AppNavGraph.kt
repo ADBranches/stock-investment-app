@@ -17,6 +17,8 @@ import androidx.navigation.compose.composable
 import com.mutebi.stockinvestmentapp.features.auth.forgot_password.ForgotPasswordScreen
 import com.mutebi.stockinvestmentapp.features.auth.login.LoginScreen
 import com.mutebi.stockinvestmentapp.features.auth.register.RegisterScreen
+import com.mutebi.stockinvestmentapp.features.education.article.ArticleDetailScreen
+import com.mutebi.stockinvestmentapp.features.education.hub.EducationHubScreen
 import com.mutebi.stockinvestmentapp.features.home.dashboard.DashboardScreen
 import com.mutebi.stockinvestmentapp.features.kyc.KycDocumentUploadScreen
 import com.mutebi.stockinvestmentapp.features.kyc.KycIntroScreen
@@ -26,6 +28,7 @@ import com.mutebi.stockinvestmentapp.features.kyc.KycSuccessScreen
 import com.mutebi.stockinvestmentapp.features.kyc.KycViewModel
 import com.mutebi.stockinvestmentapp.features.market.details.AssetDetailScreen
 import com.mutebi.stockinvestmentapp.features.market.list.MarketListScreen
+import com.mutebi.stockinvestmentapp.features.notifications.NotificationCenterScreen
 import com.mutebi.stockinvestmentapp.features.onboarding.OnboardingScreen
 import com.mutebi.stockinvestmentapp.features.portfolio.history.TransactionHistoryScreen
 import com.mutebi.stockinvestmentapp.features.portfolio.overview.PortfolioScreen
@@ -178,6 +181,12 @@ fun AppNavGraph(
                 },
                 onOpenWatchlist = {
                     navController.navigate(Routes.Watchlist.route)
+                },
+                onOpenEducation = {
+                    navController.navigate(Routes.EducationHub.route)
+                },
+                onOpenNotifications = {
+                    navController.navigate(Routes.NotificationCenter.route)
                 }
             )
         }
@@ -208,7 +217,7 @@ fun AppNavGraph(
             val assetId = backStackEntry.arguments?.getString("assetId")?.toIntOrNull()
 
             if (assetId == null) {
-                Phase6PlaceholderScreen(
+                Phase7PlaceholderScreen(
                     title = "Asset detail unavailable",
                     message = "The selected asset ID was not found."
                 )
@@ -252,7 +261,7 @@ fun AppNavGraph(
             val assetId = backStackEntry.arguments?.getString("assetId")?.toIntOrNull()
 
             if (assetId == null) {
-                Phase6PlaceholderScreen(
+                Phase7PlaceholderScreen(
                     title = "Trade setup unavailable",
                     message = "The selected asset ID was not found."
                 )
@@ -288,11 +297,45 @@ fun AppNavGraph(
                 }
             )
         }
+
+        composable(Routes.EducationHub.route) {
+            EducationHubScreen(
+                onBack = { navController.popBackStack() },
+                onOpenNotifications = {
+                    navController.navigate(Routes.NotificationCenter.route)
+                },
+                onOpenArticle = { articleId ->
+                    navController.navigate(Routes.ArticleDetail.createRoute(articleId))
+                }
+            )
+        }
+
+        composable(Routes.ArticleDetail.route) { backStackEntry ->
+            val articleId = backStackEntry.arguments?.getString("articleId")?.toIntOrNull()
+
+            if (articleId == null) {
+                Phase7PlaceholderScreen(
+                    title = "Article unavailable",
+                    message = "The selected article ID was not found."
+                )
+            } else {
+                ArticleDetailScreen(
+                    articleId = articleId,
+                    onBack = { navController.popBackStack() }
+                )
+            }
+        }
+
+        composable(Routes.NotificationCenter.route) {
+            NotificationCenterScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
     }
 }
 
 @Composable
-private fun Phase6PlaceholderScreen(
+private fun Phase7PlaceholderScreen(
     title: String,
     message: String
 ) {

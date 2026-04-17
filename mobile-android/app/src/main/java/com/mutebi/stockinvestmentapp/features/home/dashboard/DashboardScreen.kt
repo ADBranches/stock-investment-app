@@ -23,6 +23,8 @@ import com.mutebi.stockinvestmentapp.features.home.components.WatchlistPreviewCa
 fun DashboardScreen(
     onOpenMarket: () -> Unit,
     onOpenWatchlist: () -> Unit,
+    onOpenEducation: () -> Unit,
+    onOpenNotifications: () -> Unit,
     vm: DashboardViewModel = hiltViewModel()
 ) {
     val state by vm.uiState.collectAsState()
@@ -65,7 +67,10 @@ fun DashboardScreen(
             onOpenWatchlist = onOpenWatchlist
         )
 
-        EducationPromptCard()
+        EducationPromptCard(
+            onOpenEducation = onOpenEducation,
+            onOpenNotifications = onOpenNotifications
+        )
 
         state.error?.let { errorMessage ->
             Text(
