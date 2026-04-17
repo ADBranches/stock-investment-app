@@ -5,7 +5,7 @@ import com.mutebi.stockinvestmentapp.domain.model.WatchlistItem
 
 data class DashboardUiState(
     val isLoading: Boolean = false,
-    val error: String? = null,
     val topAssets: List<Asset> = emptyList(),
-    val watchlistItems: List<WatchlistItem> = emptyList()
+    val watchlistItems: List<WatchlistItem> = emptyList(),
+    val error: String? = null
 )

@@ -1,6 +1,7 @@
 package com.mutebi.stockinvestmentapp.data.repository
 
 import com.mutebi.stockinvestmentapp.core.utils.Resource
+import com.mutebi.stockinvestmentapp.data.mapper.toDomain
 import com.mutebi.stockinvestmentapp.data.remote.api.AssetApi
 import com.mutebi.stockinvestmentapp.domain.model.Asset
 import javax.inject.Inject
@@ -9,23 +10,14 @@ class AssetRepository @Inject constructor(
     private val assetApi: AssetApi
 ) {
     suspend fun getAssets(): Resource<List<Asset>> {
-        return listAssets()
-    }
-
-    suspend fun listAssets(
-        search: String? = null,
-        active: Boolean? = true
-    ): Resource<List<Asset>> {
         return try {
-            val response = assetApi.getAssets(query = search, active = active)
-            val body = response.body()
-            val assets = body?.data?.assets.orEmpty().map { it.toDomain() }
+            val assets = assetApi.getAssets()
+                .data
+                ?.assets
+                .orEmpty()
+                .map { it.toDomain() }
 
-            if (response.isSuccessful && body?.success == true) {
-                Resource.Success(assets)
-            } else {
-                Resource.Error(body?.message ?: "Unable to load assets")
-            }
+            Resource.Success(assets)
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Unable to load assets")
         }
@@ -33,17 +25,12 @@ class AssetRepository @Inject constructor(
 
     suspend fun getAssetById(assetId: Int): Resource<Asset> {
         return try {
-            val response = assetApi.getAssetById(assetId)
-            val body = response.body()
-            val dto = body?.data
+            val asset = assetApi.getAssetById(assetId).data?.toDomain()
+                ?: return Resource.Error("Asset not found")
 
-            if (response.isSuccessful && body?.success == true && dto != null) {
-                Resource.Success(dto.toDomain())
-            } else {
-                Resource.Error(body?.message ?: "Unable to load asset details")
-            }
+            Resource.Success(asset)
         } catch (e: Exception) {
-            Resource.Error(e.message ?: "Unable to load asset details")
+            Resource.Error(e.message ?: "Unable to load asset")
         }
     }
 }

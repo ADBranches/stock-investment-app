@@ -1,6 +1,7 @@
 package com.mutebi.stockinvestmentapp.core.ui.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -25,9 +26,18 @@ fun MiniLineChart(
             val x = index * stepX
             val y = size.height - ((value - min) / range) * size.height
             val point = Offset(x, y)
-            if (index == 0) path.moveTo(point.x, point.y) else path.lineTo(point.x, point.y)
+
+            if (index == 0) {
+                path.moveTo(point.x, point.y)
+            } else {
+                path.lineTo(point.x, point.y)
+            }
         }
 
-        drawPath(path = path, style = Stroke(width = 4f))
+        drawPath(
+            path = path,
+            color = MaterialTheme.colorScheme.primary,
+            style = Stroke(width = 4f)
+        )
     }
 }

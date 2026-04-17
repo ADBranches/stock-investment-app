@@ -9,6 +9,6 @@ fun AssetDto.toDomain(): Asset {
         symbol = symbol,
         name = name,
         price = price,
-        changePercent = change_percent
+        changePercent = changePercent
     )
 }

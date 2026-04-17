@@ -2,7 +2,8 @@ package com.mutebi.stockinvestmentapp.data.repository
 
 import com.mutebi.stockinvestmentapp.core.utils.Resource
 import com.mutebi.stockinvestmentapp.data.remote.api.WatchlistApi
-import com.mutebi.stockinvestmentapp.data.remote.dto.AddWatchlistRequestDto
+import com.mutebi.stockinvestmentapp.data.remote.dto.AddToWatchlistRequestDto
+import com.mutebi.stockinvestmentapp.data.remote.dto.WatchlistDto
 import com.mutebi.stockinvestmentapp.domain.model.WatchlistItem
 import javax.inject.Inject
 
@@ -11,15 +12,13 @@ class WatchlistRepository @Inject constructor(
 ) {
     suspend fun getWatchlist(): Resource<List<WatchlistItem>> {
         return try {
-            val response = api.getWatchlist()
-            val body = response.body()
-            val items = body?.data?.items.orEmpty().map { it.toDomain() }
+            val items = api.getWatchlist()
+                .data
+                ?.items
+                .orEmpty()
+                .map { it.toDomain() }
 
-            if (response.isSuccessful && body?.success == true) {
-                Resource.Success(items)
-            } else {
-                Resource.Error(body?.message ?: "Unable to load watchlist")
-            }
+            Resource.Success(items)
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Unable to load watchlist")
         }
@@ -27,32 +26,32 @@ class WatchlistRepository @Inject constructor(
 
     suspend fun addToWatchlist(assetId: Int): Resource<WatchlistItem> {
         return try {
-            val response = api.addToWatchlist(AddWatchlistRequestDto(assetId))
-            val body = response.body()
-            val dto = body?.data
+            val item = api.addToWatchlist(AddToWatchlistRequestDto(assetId))
+                .data
+                ?.toDomain()
+                ?: return Resource.Error("Unable to add asset to watchlist")
 
-            if (response.isSuccessful && body?.success == true && dto != null) {
-                Resource.Success(dto.toDomain())
-            } else {
-                Resource.Error(body?.message ?: "Unable to add asset to watchlist")
-            }
+            Resource.Success(item)
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Unable to add asset to watchlist")
         }
     }
 
-    suspend fun removeFromWatchlist(assetId: Int): Resource<String> {
+    suspend fun removeFromWatchlist(assetId: Int): Resource<Unit> {
         return try {
-            val response = api.removeFromWatchlist(assetId)
-            val body = response.body()
-
-            if (response.isSuccessful && body?.success == true) {
-                Resource.Success(body?.message ?: "Removed from watchlist")
-            } else {
-                Resource.Error(body?.message ?: "Unable to remove asset from watchlist")
-            }
+            api.removeFromWatchlist(assetId)
+            Resource.Success(Unit)
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Unable to remove asset from watchlist")
         }
+    }
+
+    private fun WatchlistDto.toDomain(): WatchlistItem {
+        return WatchlistItem(
+            assetId = assetId,
+            symbol = symbol,
+            name = name,
+            price = price
+        )
     }
 }
