@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitProvider {
 
-    private const val BASE_URL = "http://192.168.100.172:5000/"
+//    private const val BASE_URL = "http://192.168.100.172:5000/"
 
     fun provideRetrofit(authInterceptor: AuthInterceptor): Retrofit {
         val logging = HttpLoggingInterceptor().apply {

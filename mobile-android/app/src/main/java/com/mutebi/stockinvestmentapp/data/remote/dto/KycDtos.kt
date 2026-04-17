@@ -40,10 +40,9 @@ data class KycProfileDto(
             userId = userId,
             firstName = firstName.orEmpty(),
             lastName = lastName.orEmpty(),
-            dateOfBirth = "",
-            nationalId = nationalIdNumber.orEmpty(),
-            address = "",
-            phoneNumber = "",
+            nationalIdNumber = nationalIdNumber.orEmpty(),
+            documentType = documentType.orEmpty(),
+            documentNumber = documentNumber.orEmpty(),
             status = status ?: "not_started"
         )
     }

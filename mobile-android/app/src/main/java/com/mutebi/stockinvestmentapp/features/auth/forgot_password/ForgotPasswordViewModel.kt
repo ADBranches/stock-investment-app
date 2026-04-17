@@ -56,12 +56,14 @@ class ForgotPasswordViewModel(application: Application) : AndroidViewModel(appli
                         successMessage = result.data ?: "Reset request submitted"
                     )
                 }
-
                 is Resource.Error -> {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         error = result.message ?: "Request failed"
                     )
+                }
+                else -> {
+                    _uiState.value = _uiState.value.copy(isLoading = false)
                 }
             }
         }

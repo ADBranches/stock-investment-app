@@ -1,4 +1,4 @@
-package com.mutebi.stockinvestmentapp.features.profile.components
+package com.mutebi.stockinvestmentapp.features.profile.setup.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

@@ -3,6 +3,7 @@ from flask import Flask
 
 from config import config_by_name
 from app.extensions import cors, db, jwt, migrate
+from app.utils.response import error_response
 
 
 def create_app(config_name: str | None = None) -> Flask:
@@ -32,6 +33,22 @@ def register_extensions(app: Flask) -> None:
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+
+    @jwt.unauthorized_loader
+    def handle_missing_jwt(reason):
+        return error_response("Authentication required.", status_code=401)
+
+    @jwt.invalid_token_loader
+    def handle_invalid_jwt(reason):
+        return error_response("Invalid or malformed access token.", status_code=401)
+
+    @jwt.expired_token_loader
+    def handle_expired_jwt(jwt_header, jwt_payload):
+        return error_response("Session expired. Please log in again.", status_code=401)
+
+    @jwt.revoked_token_loader
+    def handle_revoked_jwt(jwt_header, jwt_payload):
+        return error_response("This session is no longer valid.", status_code=401)
     cors.init_app(
         app,
         resources={r"/api/*": {"origins": app.config["CORS_ORIGINS"]}},

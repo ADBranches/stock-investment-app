@@ -1,8 +1,8 @@
-package com.stockapp.data.remote.api
+package com.mutebi.stockinvestmentapp.data.remote.api
 
 import android.content.Context
-import com.stockapp.data.session.AuthHolder
-import com.stockapp.data.session.SessionManager
+import com.mutebi.stockinvestmentapp.data.session.SessionManager
+import com.mutebi.stockinvestmentapp.core.constants.ApiConstants
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -10,15 +10,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
-    private const val BASE_URL = "http://10.0.2.2:5000/"
 
     fun createRetrofit(context: Context): Retrofit {
         val sessionManager = SessionManager(context)
-        AuthHolder.token = sessionManager.getAuthToken()
 
         val authInterceptor = Interceptor { chain ->
             val original: Request = chain.request()
-            val token = AuthHolder.token
+            val token = sessionManager.getToken()
 
             val requestBuilder = original.newBuilder()
                 .header("Accept", "application/json")
@@ -35,7 +33,7 @@ object ApiClient {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(ApiConstants.BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

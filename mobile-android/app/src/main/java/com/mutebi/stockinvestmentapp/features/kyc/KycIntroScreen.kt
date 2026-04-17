@@ -26,7 +26,7 @@ fun KycIntroScreen(
             subtitle = "KYC helps secure your account and unlock features"
         )
 
-        Button(onClick = onStart) {
+        Button(onClick = onStartKyc) {
             Text("Start KYC")
         }
     }

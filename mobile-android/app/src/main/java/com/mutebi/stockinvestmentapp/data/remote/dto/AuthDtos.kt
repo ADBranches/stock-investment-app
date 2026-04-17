@@ -27,9 +27,8 @@ data class RegisterRequestDto(
     @SerializedName("password")
     val password: String,
     @SerializedName("full_name")
-    val full_name: String
+    val fullName: String
 )
-
 data class ForgotPasswordRequestDto(
     @SerializedName("email")
     val email: String
@@ -41,19 +40,22 @@ data class AuthUserDto(
     @SerializedName("email")
     val email: String,
     @SerializedName("full_name")
-    val full_name: String? = null,
+    val fullName: String? = null,
     @SerializedName("profile_completed")
-    val profile_completed: Boolean = false,
+    val profileCompleted: Boolean = false,
     @SerializedName("kyc_status")
-    val kyc_status: String? = null
+    val kycStatus: String? = null
 ) {
     fun toDomain(): UserProfile {
         return UserProfile(
             id = id,
             email = email,
-            fullName = full_name,
-            profileCompleted = profile_completed,
-            kycStatus = kyc_status
+            fullName = fullName.orEmpty(),
+            phoneNumber = "",
+            country = "",
+            dateOfBirth = "",
+            profileCompleted = profileCompleted,
+            kycStatus = kycStatus.orEmpty()
         )
     }
 }
@@ -62,7 +64,7 @@ data class AuthPayloadDto(
     @SerializedName("token")
     val token: String? = null,
     @SerializedName("access_token")
-    val access_token: String? = null,
+    val accessToken: String? = null,
     @SerializedName("user")
     val user: AuthUserDto? = null
 )

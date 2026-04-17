@@ -43,17 +43,14 @@ class ProfileSetupViewModel(application: Application) : AndroidViewModel(applica
                 _uiState.value = state.copy(error = "Full name is required")
                 return
             }
-
             state.phoneNumber.isBlank() -> {
                 _uiState.value = state.copy(error = "Phone number is required")
                 return
             }
-
             state.country.isBlank() -> {
                 _uiState.value = state.copy(error = "Country is required")
                 return
             }
-
             state.dateOfBirth.isBlank() -> {
                 _uiState.value = state.copy(error = "Date of birth is required")
                 return
@@ -88,12 +85,14 @@ class ProfileSetupViewModel(application: Application) : AndroidViewModel(applica
                         success = true
                     )
                 }
-
                 is Resource.Error -> {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         error = result.message ?: "Failed to update profile"
                     )
+                }
+                else -> {
+                    _uiState.value = _uiState.value.copy(isLoading = false)
                 }
             }
         }
@@ -114,12 +113,12 @@ class ProfileSetupViewModel(application: Application) : AndroidViewModel(applica
                         )
                     }
                 }
-
                 is Resource.Error -> {
                     _uiState.value = _uiState.value.copy(
                         error = result.message
                     )
                 }
+                else -> Unit
             }
         }
     }

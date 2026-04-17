@@ -47,22 +47,18 @@ class KycViewModel(application: Application) : AndroidViewModel(application) {
                 _uiState.value = state.copy(error = "First name is required")
                 return
             }
-
             state.lastName.isBlank() -> {
                 _uiState.value = state.copy(error = "Last name is required")
                 return
             }
-
             state.nationalIdNumber.isBlank() -> {
                 _uiState.value = state.copy(error = "National ID number is required")
                 return
             }
-
             state.documentType.isBlank() -> {
                 _uiState.value = state.copy(error = "Document type is required")
                 return
             }
-
             state.documentNumber.isBlank() -> {
                 _uiState.value = state.copy(error = "Document number is required")
                 return
@@ -73,7 +69,10 @@ class KycViewModel(application: Application) : AndroidViewModel(application) {
             _uiState.value = state.copy(isLoading = true, error = null)
 
             when (
-                val result = if (state.status.equals("not_started", ignoreCase = true) || state.status.isBlank()) {
+                val result = if (
+                    state.status.equals("not_started", ignoreCase = true) ||
+                    state.status.isBlank()
+                ) {
                     repository.submitKyc(
                         firstName = state.firstName.trim(),
                         lastName = state.lastName.trim(),
@@ -98,12 +97,14 @@ class KycViewModel(application: Application) : AndroidViewModel(application) {
                         status = result.data?.status.orEmpty()
                     )
                 }
-
                 is Resource.Error -> {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         error = result.message ?: "Failed to submit KYC"
                     )
+                }
+                else -> {
+                    _uiState.value = _uiState.value.copy(isLoading = false)
                 }
             }
         }
@@ -126,10 +127,10 @@ class KycViewModel(application: Application) : AndroidViewModel(application) {
                         )
                     }
                 }
-
                 is Resource.Error -> {
-                    // Keep this silent for now unless you want inline error on first load.
+                    // Keeping this silent for now unless we want inline error on first load.
                 }
+                else -> Unit
             }
         }
     }

@@ -49,32 +49,26 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
                 _uiState.value = state.copy(error = "Full name is required")
                 return
             }
-
             state.email.isBlank() -> {
                 _uiState.value = state.copy(error = "Email is required")
                 return
             }
-
             !android.util.Patterns.EMAIL_ADDRESS.matcher(state.email.trim()).matches() -> {
                 _uiState.value = state.copy(error = "Enter a valid email address")
                 return
             }
-
             state.password.isBlank() -> {
                 _uiState.value = state.copy(error = "Password is required")
                 return
             }
-
             state.confirmPassword.isBlank() -> {
                 _uiState.value = state.copy(error = "Confirm password is required")
                 return
             }
-
             state.password != state.confirmPassword -> {
                 _uiState.value = state.copy(error = "Passwords do not match")
                 return
             }
-
             !state.acceptTerms -> {
                 _uiState.value = state.copy(error = "You must accept the terms")
                 return
@@ -97,12 +91,14 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
                         success = true
                     )
                 }
-
                 is Resource.Error -> {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         error = result.message ?: "Registration failed"
                     )
+                }
+                else -> {
+                    _uiState.value = _uiState.value.copy(isLoading = false)
                 }
             }
         }

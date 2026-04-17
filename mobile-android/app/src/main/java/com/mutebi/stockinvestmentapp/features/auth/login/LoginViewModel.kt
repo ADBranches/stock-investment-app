@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = AuthRepository(
-        authApi = RetrofitProvider.authApi,
+        authApi = RetrofitProvider.authApi(application),
         sessionManager = SessionManager(application)
     )
 
@@ -47,12 +47,14 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                         success = true
                     )
                 }
-
                 is Resource.Error -> {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         error = result.message ?: "Login failed"
                     )
+                }
+                else -> {
+                    _uiState.value = _uiState.value.copy(isLoading = false)
                 }
             }
         }

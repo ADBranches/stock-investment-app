@@ -37,7 +37,7 @@ fun AppNavGraph(
                     }
                 },
                 onNavigateToDashboard = {
-                    navController.navigate(Routes.Dashboard.route) {
+                    navController.navigate(Routes.ProfileSetup.route) {
                         popUpTo(Routes.Splash.route) { inclusive = true }
                     }
                 }
@@ -57,7 +57,7 @@ fun AppNavGraph(
         composable(Routes.Login.route) {
             LoginScreen(
                 onLoginSuccess = {
-                    navController.navigate(Routes.Dashboard.route) {
+                    navController.navigate(Routes.ProfileSetup.route) {
                         popUpTo(Routes.Login.route) { inclusive = true }
                     }
                 },
@@ -113,9 +113,6 @@ fun AppNavGraph(
             KycPersonalInfoScreen(
                 onNext = {
                     navController.navigate(Routes.KycDocumentUpload.route)
-                },
-                onBack = {
-                    navController.popBackStack()
                 }
             )
         }
@@ -124,29 +121,23 @@ fun AppNavGraph(
             KycDocumentUploadScreen(
                 onNext = {
                     navController.navigate(Routes.KycReview.route)
-                },
-                onBack = {
-                    navController.popBackStack()
                 }
             )
         }
 
         composable(Routes.KycReview.route) {
             KycReviewScreen(
-                onSubmitSuccess = {
+                onSuccess = {
                     navController.navigate(Routes.KycSuccess.route) {
                         popUpTo(Routes.KycReview.route) { inclusive = true }
                     }
-                },
-                onBack = {
-                    navController.popBackStack()
                 }
             )
         }
 
         composable(Routes.KycSuccess.route) {
             KycSuccessScreen(
-                onContinue = {
+                onDone = {
                     navController.navigate(Routes.Dashboard.route) {
                         popUpTo(Routes.KycIntro.route) { inclusive = true }
                     }
