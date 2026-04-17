@@ -2,20 +2,23 @@ package com.mutebi.stockinvestmentapp.data.remote.network
 
 import android.app.Application
 import com.google.gson.GsonBuilder
+import com.mutebi.stockinvestmentapp.core.constants.ApiConstants
+import com.mutebi.stockinvestmentapp.data.remote.api.AssetApi
 import com.mutebi.stockinvestmentapp.data.remote.api.AuthApi
 import com.mutebi.stockinvestmentapp.data.remote.api.KycApi
+import com.mutebi.stockinvestmentapp.data.remote.api.PortfolioApi
+import com.mutebi.stockinvestmentapp.data.remote.api.TradeApi
+import com.mutebi.stockinvestmentapp.data.remote.api.TransactionApi
 import com.mutebi.stockinvestmentapp.data.remote.api.UserApi
+import com.mutebi.stockinvestmentapp.data.remote.api.WatchlistApi
 import com.mutebi.stockinvestmentapp.data.session.SessionManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import com.mutebi.stockinvestmentapp.core.constants.ApiConstants
 import java.util.concurrent.TimeUnit
 
 object RetrofitProvider {
-
-//    private const val BASE_URL = "http://192.168.100.172:5000/"
 
     fun provideRetrofit(authInterceptor: AuthInterceptor): Retrofit {
         val logging = HttpLoggingInterceptor().apply {
@@ -39,24 +42,33 @@ object RetrofitProvider {
             .build()
     }
 
-    fun authApi(application: Application): AuthApi {
-        val retrofit = provideRetrofit(
+    private fun retrofit(application: Application): Retrofit {
+        return provideRetrofit(
             AuthInterceptor(SessionManager(application))
         )
-        return retrofit.create(AuthApi::class.java)
     }
 
-    fun userApi(application: Application): UserApi {
-        val retrofit = provideRetrofit(
-            AuthInterceptor(SessionManager(application))
-        )
-        return retrofit.create(UserApi::class.java)
-    }
+    fun authApi(application: Application): AuthApi =
+        retrofit(application).create(AuthApi::class.java)
 
-    fun kycApi(application: Application): KycApi {
-        val retrofit = provideRetrofit(
-            AuthInterceptor(SessionManager(application))
-        )
-        return retrofit.create(KycApi::class.java)
-    }
+    fun userApi(application: Application): UserApi =
+        retrofit(application).create(UserApi::class.java)
+
+    fun kycApi(application: Application): KycApi =
+        retrofit(application).create(KycApi::class.java)
+
+    fun assetApi(application: Application): AssetApi =
+        retrofit(application).create(AssetApi::class.java)
+
+    fun watchlistApi(application: Application): WatchlistApi =
+        retrofit(application).create(WatchlistApi::class.java)
+
+    fun portfolioApi(application: Application): PortfolioApi =
+        retrofit(application).create(PortfolioApi::class.java)
+
+    fun tradeApi(application: Application): TradeApi =
+        retrofit(application).create(TradeApi::class.java)
+
+    fun transactionApi(application: Application): TransactionApi =
+        retrofit(application).create(TransactionApi::class.java)
 }

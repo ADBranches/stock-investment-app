@@ -20,8 +20,16 @@ sealed class Routes(val route: String) {
     data object Market : Routes("market")
     data object Watchlist : Routes("watchlist")
     data object Portfolio : Routes("portfolio")
+    data object TransactionHistory : Routes("portfolio_history")
 
     data object AssetDetail : Routes("asset_detail/{assetId}") {
         fun createRoute(assetId: Int): String = "asset_detail/$assetId"
     }
+
+    data object TradeOrder : Routes("trade_order/{assetId}") {
+        fun createRoute(assetId: Int): String = "trade_order/$assetId"
+    }
+
+    data object TradeConfirm : Routes("trade_confirm")
+    data object TradeResult : Routes("trade_result")
 }

@@ -1,18 +1,22 @@
 package com.mutebi.stockinvestmentapp.di
 
-import com.mutebi.stockinvestmentapp.data.session.SessionManager
 import com.mutebi.stockinvestmentapp.data.remote.api.AssetApi
 import com.mutebi.stockinvestmentapp.data.remote.api.AuthApi
+import com.mutebi.stockinvestmentapp.data.remote.api.KycApi
 import com.mutebi.stockinvestmentapp.data.remote.api.PortfolioApi
+import com.mutebi.stockinvestmentapp.data.remote.api.TradeApi
+import com.mutebi.stockinvestmentapp.data.remote.api.TransactionApi
+import com.mutebi.stockinvestmentapp.data.remote.api.UserApi
 import com.mutebi.stockinvestmentapp.data.remote.api.WatchlistApi
 import com.mutebi.stockinvestmentapp.data.repository.AssetRepository
 import com.mutebi.stockinvestmentapp.data.repository.AuthRepository
-import com.mutebi.stockinvestmentapp.data.repository.PortfolioRepository
-import com.mutebi.stockinvestmentapp.data.repository.WatchlistRepository
-import com.mutebi.stockinvestmentapp.data.remote.api.KycApi
-import com.mutebi.stockinvestmentapp.data.remote.api.UserApi
 import com.mutebi.stockinvestmentapp.data.repository.KycRepository
+import com.mutebi.stockinvestmentapp.data.repository.PortfolioRepository
+import com.mutebi.stockinvestmentapp.data.repository.TradeRepository
+import com.mutebi.stockinvestmentapp.data.repository.TransactionRepository
 import com.mutebi.stockinvestmentapp.data.repository.UserRepository
+import com.mutebi.stockinvestmentapp.data.repository.WatchlistRepository
+import com.mutebi.stockinvestmentapp.data.session.SessionManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,4 +56,14 @@ object RepositoryModule {
     fun provideKycRepository(
         kycApi: KycApi
     ): KycRepository = KycRepository(kycApi)
+
+    @Provides
+    fun provideTradeRepository(
+        tradeApi: TradeApi
+    ): TradeRepository = TradeRepository(tradeApi)
+
+    @Provides
+    fun provideTransactionRepository(
+        transactionApi: TransactionApi
+    ): TransactionRepository = TransactionRepository(transactionApi)
 }

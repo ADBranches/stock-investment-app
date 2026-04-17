@@ -13,16 +13,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mutebi.stockinvestmentapp.features.market.components.AssetCard
-import com.mutebi.stockinvestmentapp.features.market.components.FilterChipGroup
 import com.mutebi.stockinvestmentapp.features.market.components.MarketSearchBar
 
 @Composable
 fun MarketListScreen(
     onAssetClick: (Int) -> Unit,
     onOpenWatchlist: () -> Unit,
-    vm: MarketListViewModel = viewModel()
+    vm: MarketListViewModel = hiltViewModel()
 ) {
     val state by vm.uiState.collectAsState()
 
@@ -38,14 +37,7 @@ fun MarketListScreen(
         item {
             MarketSearchBar(
                 value = state.searchQuery,
-                onValueChange = vm::onSearchQueryChange
-            )
-        }
-
-        item {
-            FilterChipGroup(
-                selected = state.selectedFilter,
-                onSelectedChange = vm::onFilterChange
+                onValueChange = vm::onSearchChange
             )
         }
 
@@ -59,14 +51,27 @@ fun MarketListScreen(
             item {
                 CircularProgressIndicator()
             }
+        } else if (state.filteredAssets.isEmpty()) {
+            item {
+                Text("No assets available.")
+            }
         } else {
-            items(state.visibleAssets, key = { it.id }) { asset ->
+            items(
+                items = state.filteredAssets,
+                key = { asset -> asset.id }
+            ) { asset ->
                 AssetCard(
                     asset = asset,
-                    isInWatchlist = asset.id in state.watchlistIds,
+                    isInWatchlist = false,
                     onClick = { onAssetClick(asset.id) },
-                    onWatchlistClick = { vm.toggleWatchlist(asset.id) }
+                    onWatchlistClick = { vm.addToWatchlist(asset.id) }
                 )
+            }
+        }
+
+        state.message?.let { message ->
+            item {
+                Text(message)
             }
         }
 

@@ -13,6 +13,8 @@ fun MiniLineChart(
     values: List<Float>,
     modifier: Modifier = Modifier
 ) {
+    val lineColor = MaterialTheme.colorScheme.primary
+
     Canvas(modifier = modifier) {
         if (values.size < 2) return@Canvas
 
@@ -27,16 +29,12 @@ fun MiniLineChart(
             val y = size.height - ((value - min) / range) * size.height
             val point = Offset(x, y)
 
-            if (index == 0) {
-                path.moveTo(point.x, point.y)
-            } else {
-                path.lineTo(point.x, point.y)
-            }
+            if (index == 0) path.moveTo(point.x, point.y) else path.lineTo(point.x, point.y)
         }
 
         drawPath(
             path = path,
-            color = MaterialTheme.colorScheme.primary,
+            color = lineColor,
             style = Stroke(width = 4f)
         )
     }

@@ -1,14 +1,16 @@
 package com.mutebi.stockinvestmentapp.di
 
-import com.mutebi.stockinvestmentapp.data.session.SessionManager
 import com.mutebi.stockinvestmentapp.data.remote.api.AssetApi
 import com.mutebi.stockinvestmentapp.data.remote.api.AuthApi
+import com.mutebi.stockinvestmentapp.data.remote.api.KycApi
 import com.mutebi.stockinvestmentapp.data.remote.api.PortfolioApi
+import com.mutebi.stockinvestmentapp.data.remote.api.TradeApi
+import com.mutebi.stockinvestmentapp.data.remote.api.TransactionApi
+import com.mutebi.stockinvestmentapp.data.remote.api.UserApi
 import com.mutebi.stockinvestmentapp.data.remote.api.WatchlistApi
 import com.mutebi.stockinvestmentapp.data.remote.network.AuthInterceptor
 import com.mutebi.stockinvestmentapp.data.remote.network.RetrofitProvider
-import com.mutebi.stockinvestmentapp.data.remote.api.KycApi
-import com.mutebi.stockinvestmentapp.data.remote.api.UserApi
+import com.mutebi.stockinvestmentapp.data.session.SessionManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,6 +45,7 @@ object NetworkModule {
     @Provides
     fun provideKycApi(retrofit: Retrofit): KycApi =
         retrofit.create(KycApi::class.java)
+
     @Provides
     fun provideAssetApi(retrofit: Retrofit): AssetApi =
         retrofit.create(AssetApi::class.java)
@@ -54,4 +57,12 @@ object NetworkModule {
     @Provides
     fun provideWatchlistApi(retrofit: Retrofit): WatchlistApi =
         retrofit.create(WatchlistApi::class.java)
+
+    @Provides
+    fun provideTradeApi(retrofit: Retrofit): TradeApi =
+        retrofit.create(TradeApi::class.java)
+
+    @Provides
+    fun provideTransactionApi(retrofit: Retrofit): TransactionApi =
+        retrofit.create(TransactionApi::class.java)
 }

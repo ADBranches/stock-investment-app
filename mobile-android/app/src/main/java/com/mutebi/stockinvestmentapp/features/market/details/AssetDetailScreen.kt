@@ -23,6 +23,7 @@ fun AssetDetailScreen(
     assetId: Int,
     onBack: () -> Unit,
     onOpenWatchlist: () -> Unit,
+    onTradeAsset: () -> Unit,
     vm: AssetDetailViewModel = viewModel()
 ) {
     val state by vm.uiState.collectAsState()
@@ -88,6 +89,13 @@ fun AssetDetailScreen(
             } else {
                 Text(if (state.isInWatchlist) "Remove from watchlist" else "Add to watchlist")
             }
+        }
+
+        Button(
+            onClick = onTradeAsset,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Trade this asset")
         }
 
         TextButton(onClick = onOpenWatchlist) {

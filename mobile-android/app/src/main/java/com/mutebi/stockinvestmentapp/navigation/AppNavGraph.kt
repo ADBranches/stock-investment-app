@@ -27,8 +27,14 @@ import com.mutebi.stockinvestmentapp.features.kyc.KycViewModel
 import com.mutebi.stockinvestmentapp.features.market.details.AssetDetailScreen
 import com.mutebi.stockinvestmentapp.features.market.list.MarketListScreen
 import com.mutebi.stockinvestmentapp.features.onboarding.OnboardingScreen
+import com.mutebi.stockinvestmentapp.features.portfolio.history.TransactionHistoryScreen
+import com.mutebi.stockinvestmentapp.features.portfolio.overview.PortfolioScreen
 import com.mutebi.stockinvestmentapp.features.profile.setup.ProfileSetupScreen
 import com.mutebi.stockinvestmentapp.features.splash.SplashScreen
+import com.mutebi.stockinvestmentapp.features.trade.confirm.TradeConfirmScreen
+import com.mutebi.stockinvestmentapp.features.trade.confirm.TradeResultScreen
+import com.mutebi.stockinvestmentapp.features.trade.order.TradeOrderScreen
+import com.mutebi.stockinvestmentapp.features.trade.order.TradeOrderViewModel
 import com.mutebi.stockinvestmentapp.features.watchlist.WatchlistScreen
 
 @Composable
@@ -38,6 +44,7 @@ fun AppNavGraph(
     modifier: Modifier = Modifier
 ) {
     val kycVm: KycViewModel = viewModel()
+    val tradeVm: TradeOrderViewModel = viewModel()
 
     NavHost(
         navController = navController,
@@ -201,7 +208,7 @@ fun AppNavGraph(
             val assetId = backStackEntry.arguments?.getString("assetId")?.toIntOrNull()
 
             if (assetId == null) {
-                Phase5PlaceholderScreen(
+                Phase6PlaceholderScreen(
                     title = "Asset detail unavailable",
                     message = "The selected asset ID was not found."
                 )
@@ -211,22 +218,81 @@ fun AppNavGraph(
                     onBack = { navController.popBackStack() },
                     onOpenWatchlist = {
                         navController.navigate(Routes.Watchlist.route)
+                    },
+                    onTradeAsset = {
+                        navController.navigate(Routes.TradeOrder.createRoute(assetId))
                     }
                 )
             }
         }
 
         composable(Routes.Portfolio.route) {
-            Phase5PlaceholderScreen(
-                title = "Portfolio comes in Phase 6",
-                message = "This route is intentionally deferred until Portfolio and Trade Flow."
+            PortfolioScreen(
+                onOpenHistory = {
+                    navController.navigate(Routes.TransactionHistory.route)
+                },
+                onTradeAsset = { assetId ->
+                    navController.navigate(Routes.TradeOrder.createRoute(assetId))
+                },
+                onOpenMarket = {
+                    navController.navigate(Routes.Market.route)
+                }
+            )
+        }
+
+        composable(Routes.TransactionHistory.route) {
+            TransactionHistoryScreen(
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(Routes.TradeOrder.route) { backStackEntry ->
+            val assetId = backStackEntry.arguments?.getString("assetId")?.toIntOrNull()
+
+            if (assetId == null) {
+                Phase6PlaceholderScreen(
+                    title = "Trade setup unavailable",
+                    message = "The selected asset ID was not found."
+                )
+            } else {
+                TradeOrderScreen(
+                    assetId = assetId,
+                    vm = tradeVm,
+                    onBack = { navController.popBackStack() },
+                    onContinue = {
+                        navController.navigate(Routes.TradeConfirm.route)
+                    }
+                )
+            }
+        }
+
+        composable(Routes.TradeConfirm.route) {
+            TradeConfirmScreen(
+                vm = tradeVm,
+                onBack = { navController.popBackStack() },
+                onTradeCompleted = {
+                    navController.navigate(Routes.TradeResult.route)
+                }
+            )
+        }
+
+        composable(Routes.TradeResult.route) {
+            TradeResultScreen(
+                vm = tradeVm,
+                onDone = {
+                    navController.navigate(Routes.Portfolio.route) {
+                        popUpTo(Routes.TradeOrder.route) { inclusive = false }
+                    }
+                }
             )
         }
     }
 }
 
 @Composable
-private fun Phase5PlaceholderScreen(
+private fun Phase6PlaceholderScreen(
     title: String,
     message: String
 ) {
